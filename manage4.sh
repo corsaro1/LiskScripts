@@ -36,7 +36,7 @@ PRT1=":8000"   # 7000 on testnet, 8000 on mainnet
 PRT2=$PRT1     # same port used on both server
 PRT3=$PRT1  
 PRT4=$PRT1   # same port used on both server
-PRTS=":8443"   # port used on https
+PRTS=":2443"   # port used on https
 pbk="PUBLIC KEY"
 while true; do
     HEIGHT1=$(curl --connect-timeout 3 -s "http://"$SRV1""$PRT1"/api/loader/status/sync"| jq '.height')
