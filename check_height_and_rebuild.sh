@@ -135,8 +135,8 @@ local_height() {
 		## Thank you doweig for better output formating
         	date +"%Y-%m-%d %H:%M:%S || Reloading! Local: $CHECKSRV, Highest: $HEIGHT, Diff: $diff"
 		ChangeDirectory ## Make sure we are in the correct directory
-		bash lisk.sh reload
-		sleep 60
+	##	bash lisk.sh reload
+		sleep 140
 		
 		## Make sure local height is not empty, if it is empty try the call until it is not empty
 		CHECKSRV=`curl -s "http://$SRV/api/loader/status/sync"| jq '.height'`
