@@ -55,7 +55,7 @@ find_newest_snap_rebuild(){
 	  https://downloads.lisk.io/lisk/main		## Official
 	  https://snapshot.liskwallet.net			## isabella
 	  https://snapshot.lisknode.io				## Gr33nDrag0n
-	  https://lisktools.io/backups/index.php	## MrV
+	  https://lisktools.io/backups				## MrV
 	  https://snapshot.punkrock.me				## punkrock
 	  https://snap.lsknode.org					## redsn0w
 	)
