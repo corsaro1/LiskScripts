@@ -32,7 +32,7 @@ function ChangeDirectory(){
 function SyncState()
 {
 	result='true'
-	while [ $result == 'true' ]
+	while [[ -z $result || $result != 'false' ]]
 	do
 		date +"%Y-%m-%d %H:%M:%S || Blockchain syncing"
 		result=`curl -s "http://$SRV/api/loader/status/sync"| jq '.syncing'`
@@ -52,12 +52,12 @@ function SyncState()
 find_newest_snap_rebuild(){
 
 	SNAPSHOTS=(
-	  https://downloads.lisk.io/lisk/main		## Official
+	  https://downloads.lisk.io/lisk/main			## Official
 	  https://snapshot.liskwallet.net			## isabella
 	  https://snapshot.lisknode.io				## Gr33nDrag0n
 	  https://lisktools.io/backups				## MrV
 	  https://snapshot.punkrock.me				## punkrock
-	  https://snap.lsknode.org					## redsn0w
+	  https://snap.lsknode.org				## redsn0w
 	)
 	
 	MATCHER="lisk_main_backup-[0-9]*\.gz"
@@ -70,10 +70,9 @@ find_newest_snap_rebuild(){
 	
 	for SNAPSHOT in ${SNAPSHOTS[@]}
 	do
-	  BACKUP=`curl -s $SNAPSHOT | grep -o "$MATCHER" | sort | tail -n 1`
+	  BACKUP=`curl -s -L $SNAPSHOT | grep -o "$MATCHER" | sort | tail -n 1`
 	  BLOCK=`echo $BACKUP | grep -oh "[0-9]*"`
-	  echo "$SNAPSHOT"
-	  echo "$BLOCK"
+	  date +"%Y-%m-%d %H:%M:%S || $SNAPSHOT | Block height: $BLOCK"
 	  if [ -z "$BLOCK" ];
 	  then
 	  	date +"%Y-%m-%d %H:%M:%S || Couldn't locate block number"
@@ -91,7 +90,6 @@ find_newest_snap_rebuild(){
 			 BESTSNAP2=$SNAPSHOT
 		  fi
 	  fi
-	  echo ""
 	done
 	
 	## Randomly choose between the best 2 snapshots to prevent everyone downloading from the same source
@@ -133,10 +131,11 @@ local_height() {
 	if [ "$diff" -gt "4" ]
 	then
 		## Thank you doweig for better output formating
-        	date +"%Y-%m-%d %H:%M:%S || Reloading! Local: $CHECKSRV, Highest: $HEIGHT, Diff: $diff"
-		ChangeDirectory ## Make sure we are in the correct directory
-	##	bash lisk.sh reload
-		sleep 140
+        	##date +"%Y-%m-%d %H:%M:%S || Reloading! Local: $CHECKSRV, Highest: $HEIGHT, Diff: $diff"
+		##ChangeDirectory ## Make sure we are in the correct directory
+		##bash lisk.sh reload  # 0.5.1 often solves short stucks by itself
+		date +"%Y-%m-%d %H:%M:%S || Sleeping for 140 seconds to wait for autocorrect! Local: $CHECKSRV, Highest: $HEIGHT, Diff: $diff"
+		sleep 140  #normally a short stuck is solved by itself in less then 140 seconds | by corsaro
 		
 		## Make sure local height is not empty, if it is empty try the call until it is not empty
 		CHECKSRV=`curl -s "http://$SRV/api/loader/status/sync"| jq '.height'`
