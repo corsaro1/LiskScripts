@@ -1,4 +1,4 @@
-## Version 0.9.5.2
+## Version 0.9.5.2 by mrv777 modified by corsaro
 #!/bin/bash
 
 ## Check for config file
